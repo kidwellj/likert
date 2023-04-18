@@ -165,7 +165,7 @@ likert.bar.plot <- function(l,
 		}
 		if(plot.percents) {
 			#warning('plot.percents is not currently supported for grouped analysis.')
-			lpercentpos <- ddply(results[results$value > 0,], .(Group, Item), transform,
+			lpercentpos <- plyr::ddply(results[results$value > 0,], .(Group, Item), transform,
 								 pos = cumsum(value) - 0.5 * value)
 			p <- p + geom_text(data = lpercentpos, 
 							   aes(x = Group, y = pos, 
@@ -176,7 +176,7 @@ likert.bar.plot <- function(l,
 				lpercentneg <- lpercentneg[nrow(lpercentneg):1, ]
 				lpercentneg$value <- abs(lpercentneg$value)
 				lpercentneg <-
-					ddply(lpercentneg,
+					plyr::ddply(lpercentneg,
 						  .(Group, Item),
 						  transform,
 						  pos = cumsum(value) - 0.5 * value)
@@ -304,7 +304,7 @@ likert.bar.plot <- function(l,
 			if(center %% 1 == 0) { # Midpoint is a level (i.e. there are an odd number of levels)
 				center.label <- names(l$results)[center+1]
 			}
-			lpercentpos <- ddply(results[results$value > 0,], .(Item), transform, 
+			lpercentpos <- plyr::ddply(results[results$value > 0,], .(Item), transform, 
 								 pos = cumsum(value) - 0.5*value)
 			p <- p + geom_text(data=lpercentpos[lpercentpos$variable != center.label,], 
 							   aes(x=Item, y=pos, 
@@ -314,7 +314,7 @@ likert.bar.plot <- function(l,
 			if(nrow(lpercentneg) > 0) {
 				lpercentneg <- lpercentneg[nrow(lpercentneg):1,]
 				lpercentneg$value <- abs(lpercentneg$value)
-				lpercentneg <- ddply(lpercentneg, .(Item), transform, 
+				lpercentneg <- plyr::ddply(lpercentneg, .(Item), transform, 
 									 pos = cumsum(value) - 0.5*value)	
 				lpercentneg$pos <- lpercentneg$pos * -1
 				p <- p + geom_text(data=lpercentneg[lpercentneg$variable != center.label,], 
